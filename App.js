@@ -6,6 +6,8 @@
  * @flow strict-local
  */
 
+import RNSettings from 'react-native-settings';
+
 import React from 'react';
 import {
   SafeAreaView,
@@ -24,7 +26,14 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-const App: () => React$Node = () => {
+const App = () => {
+  RNSettings.getSetting(RNSettings.LOCATION_SETTING).then((result) => {
+    if (result == RNSettings.ENABLED) {
+      console.log('location is enabled');
+    } else {
+      console.log('location is disabled');
+    }
+  });
   return (
     <>
       <StatusBar barStyle="dark-content" />
