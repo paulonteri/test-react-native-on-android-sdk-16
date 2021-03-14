@@ -25,7 +25,32 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import RNFetchBlob from 'rn-fetch-blob';
 
+export function test() {
+  // send http request in a new thread (using native code)
+  RNFetchBlob.fetch('GET', 'http://www.example.com/images/img1.png', {
+    Authorization: 'Bearer access-token...',
+    // more headers  ..
+  })
+    .then((res) => {
+      let status = res.info().status;
+
+      if (status == 200) {
+        // the conversion is done in native code
+        let base64Str = res.base64();
+        // the following conversions are done in js, it's SYNC
+        let text = res.text();
+        let json = res.json();
+      } else {
+        // handle other status codes
+      }
+    })
+    // Something went wrong:
+    .catch((errorMessage, statusCode) => {
+      // error handling
+    });
+}
 const App = () => {
   RNSettings.getSetting(RNSettings.LOCATION_SETTING).then((result) => {
     if (result == RNSettings.ENABLED) {
